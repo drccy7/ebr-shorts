@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Inline EBR Width Metrology — Every Wafer, 0 s Added</title>
+  <meta name="description" content="Inline wafer edge bead removal (EBR) metrology during WTR transfer with zero throughput loss." />
+  <meta property="og:title" content="Inline EBR Width Metrology — Every Wafer, 0 s Added" />
+  <meta property="og:description" content="Every point on the wafer edge measured inline during robot transfer. 0 s added to cycle time." />
+  <meta property="og:type" content="video.other" />
+  <meta property="og:video" content="EBR_shorts_X_v3.mp4" />
+  <meta property="og:video:type" content="video/mp4" />
+  <meta property="og:video:width" content="1080" />
+  <meta property="og:video:height" content="1920" />
+  <style>
+    :root {
+      --bg: #0c0e14;
+      --panel: #141822;
+      --border: #232a3b;
+      --ink: #f0f3f8;
+      --sub: #8c96a6;
+      --cyan: #00c8dc;
+      --copper: #d68750;
+      --green: #46cd82;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    .layout {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      max-width: 980px;
+      width: 100%;
+    }
+
+    /* 9:16 Vertical Video Stage */
+    .stage-wrap {
+      position: relative;
+      height: min(86dvh, 820px);
+      aspect-ratio: 9 / 16;
+      background: #080a0f;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 200, 220, 0.12);
+      flex-shrink: 0;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--bg);
+    }
+
+    /* Side Control & Chapter Panel */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      align-self: flex-start;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: rgba(0, 200, 220, 0.1);
+      border: 1px solid rgba(0, 200, 220, 0.3);
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    h1 span {
+      color: var(--cyan);
+    }
+
+    .desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--sub);
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sub);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chapters {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .chap-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .chap-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(0, 200, 220, 0.08);
+    }
+
+    .chap-btn.active {
+      border-color: var(--cyan);
+      background: rgba(0, 200, 220, 0.16);
+      color: #ffffff;
+    }
+
+    .chap-time {
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      color: var(--cyan);
+      opacity: 0.85;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      flex: 1;
+      min-width: 80px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      border-radius: 9px;
+      padding: 9px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(0, 200, 220, 0.1);
+    }
+
+    .ctrl-btn.primary {
+      background: var(--cyan);
+      color: #061014;
+      border-color: var(--cyan);
+      font-weight: 700;
+    }
+
+    .ctrl-btn.primary:hover {
+      filter: brightness(1.1);
+    }
+
+    .speed-group {
+      display: flex;
+      gap: 5px;
+    }
+
+    .speed-btn {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--sub);
+      border-radius: 7px;
+      padding: 6px 0;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      color: var(--ink);
+      border-color: var(--copper);
+      background: rgba(214, 135, 80, 0.18);
+    }
+
+    @media (max-width: 780px) {
+      body {
+        padding: 10px;
+        justify-content: flex-start;
+      }
+      .layout {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .stage-wrap {
+        height: auto;
+        width: min(100%, 420px);
+      }
+      .sidebar {
+        max-width: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="stage-wrap">
+      <video id="player" src="EBR_shorts_X_v3.mp4" autoplay loop muted playsinline controls preload="auto"></video>
+    </div>
+
+    <div class="sidebar">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Inline Semiconductor Metrology
+      </div>
+
+      <h1>Every Wafer.<br /><span>0 s Added.</span></h1>
+
+      <p class="desc">
+        Inline EBR (Edge Bead Removal) width metrology during WTR robot transfer. Restores a true 360° wafer profile from on-the-fly optical imaging with zero throughput loss.
+      </p>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Scene Jump</span>
+          <span id="timeDisplay">00:00 / 00:49</span>
+        </div>
+        <div class="chapters" id="chapterList">
+          <button class="chap-btn active" data-time="0.0">
+            <span>1. ECP Plating</span>
+            <span class="chap-time">0:00</span>
+          </button>
+          <button class="chap-btn" data-time="12.6">
+            <span>2. Edge Particles</span>
+            <span class="chap-time">0:12</span>
+          </button>
+          <button class="chap-btn" data-time="17.7">
+            <span>3. EBR Drift</span>
+            <span class="chap-time">0:17</span>
+          </button>
+          <button class="chap-btn" data-time="24.0">
+            <span>4. Inline Scan</span>
+            <span class="chap-time">0:24</span>
+          </button>
+          <button class="chap-btn" data-time="31.2">
+            <span>5. 360° Metrology</span>
+            <span class="chap-time">0:31</span>
+          </button>
+          <button class="chap-btn" data-time="43.6">
+            <span>6. FDC Summary</span>
+            <span class="chap-time">0:43</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Playback Controls</span>
+        </div>
+        <div class="controls-row">
+          <button class="ctrl-btn primary" id="playPauseBtn">Pause</button>
+          <button class="ctrl-btn" id="restartBtn">Restart</button>
+          <button class="ctrl-btn" id="fullscreenBtn">Fullscreen</button>
+          <button class="ctrl-btn" id="copyLinkBtn">Copy Link</button>
+        </div>
+        <div class="speed-group" id="speedGroup">
+          <button class="speed-btn" data-speed="0.5">0.5x</button>
+          <button class="speed-btn" data-speed="0.75">0.75x</button>
+          <button class="speed-btn active" data-speed="1">1.0x</button>
+          <button class="speed-btn" data-speed="1.25">1.25x</button>
+          <button class="speed-btn" data-speed="1.5">1.5x</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('player');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const chapBtns = Array.from(document.querySelectorAll('.chap-btn'));
+    const speedBtns = Array.from(document.querySelectorAll('.speed-btn'));
+
+    function fmt(sec) {
+      if (!isFinite(sec)) return '00:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    video.addEventListener('play', () => { playPauseBtn.textContent = 'Pause'; });
+    video.addEventListener('pause', () => { playPauseBtn.textContent = 'Play'; });
+
+    video.addEventListener('timeupdate', () => {
+      const cur = video.currentTime;
+      const dur = video.duration || 48.9;
+      timeDisplay.textContent = `${fmt(cur)} / ${fmt(dur)}`;
+
+      let activeIdx = 0;
+      for (let i = 0; i < chapBtns.length; i++) {
+        if (cur >= parseFloat(chapBtns[i].dataset.time) - 0.2) {
+          activeIdx = i;
+        }
+      }
+      chapBtns.forEach((b, idx) => b.classList.toggle('active', idx === activeIdx));
+    });
+
+    chapBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        video.currentTime = parseFloat(btn.dataset.time);
+        video.play();
+      });
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      if (video.paused) video.play();
+      else video.pause();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      video.currentTime = 0;
+      video.play();
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (video.requestFullscreen) video.requestFullscreen();
+      else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+    });
+
+    copyLinkBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        const prev = copyLinkBtn.textContent;
+        copyLinkBtn.textContent = 'Copied!';
+        setTimeout(() => { copyLinkBtn.textContent = prev; }, 1500);
+      } catch (_) {}
+    });
+
+    speedBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const spd = parseFloat(btn.dataset.speed);
+        video.playbackRate = spd;
+        speedBtns.forEach(b => b.classList.toggle('active', b === btn));
+      });
+    });
+  </script>
+</body>
+</html>
